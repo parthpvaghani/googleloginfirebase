@@ -2,14 +2,17 @@ import React from 'react'
 
 function EventPost(props) {
   return(
-    props.users.map(user=>{
+    props.events.map(event=>{
       return (
-        <div>
+        <div key={event.id}>
            <div className="card bg-light mb-3">
-                     <div Name="card-header">{user.user.first}</div>
+                     <div Name="card-header">{event.event.EventName}</div>
                      <div className="card-body">
-                       <h5 className="card-title">{user.user.first}</h5>
-                       <p className="card-text">{user.user.first}</p>
+                       <h5 className="card-title">{event.event.EventDesc}</h5>
+                       <p className="card-text">{event.event.EventDate}</p>
+                       <button className="btn btn-primary" type="text" onClick={props.handleDeleteEvent}>DeleteEvent</button>
+                       <button className="btn btn-primary" type="text" onClick={props.handleUpdateEvent}>UpdateEvent</button>
+               
                      </div>
                 </div>  
         </div>

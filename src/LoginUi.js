@@ -1,26 +1,18 @@
 import React, { Component } from "react";
 import {auth,db} from './firebase'
-import EventPost from './EventPost'
 import * as firebase from "firebase";
-class Login extends Component {
+class LoginUi extends Component {
 
     constructor(props){
         super(props);
         this.state = {
             username:'',
             password:'',
-            eventname:'',
-            eventdate:'',
-            desc:'',
-            events:[]
         }
         this.handlelogin = this.handlelogin.bind(this)
         this.handlechange = this.handlechange.bind(this)
         this.handleregister = this.handleregister.bind(this)
         this.handlelogout = this.handlelogout.bind(this)
-        this.handleAddEvent = this.handleAddEvent.bind(this)
-        this.handleDeleteEvent = this.handleDeleteEvent.bind(this)
-        this.handleUpdateEvent = this.handleUpdateEvent.bind(this)
     }
 
     handlechange(event){
@@ -74,50 +66,7 @@ class Login extends Component {
         alert('signed Out')
     }
 
-    handleAddEvent(e){
-        e.preventDefault()
-        
-        db.collection('Events').add({
-            EventName:this.state.eventname,
-            EventDate:this.state.eventdate,
-            EventDesc:this.state.desc
-        })
-    }
-
-    handleDeleteEvent(e){
-        e.preventDefault()
-
-    }
-    handleUpdateEvent(e){
-
-        //update data at given location ---UPDATE METHOD
-        // e.preventDefault()
-        // let newlyAddedRef = firebase.database().ref('Users');
-        // newlyAddedRef.update({
-        //     EventName:this.state.eventname
-        // })
-
-        //Add transactional data(fetch+calculation+storeitback)
-        //or simply updation
-        // let eventRef = firebase.database.ref.child('Events')
-
-    }
-
-    componentDidMount = async () => {
-
-        //realtime updates
-        db.collection('Events').onSnapshot(snapshot=>{
-            const events  = snapshot.docs.map(doc=>{
-                return{id:doc.id,event:doc.data()}
-             })
-
-             this.setState({events})
-             console.log(this.state.events)
-        })
-      
-       
-    }
-
+   
     render(){
         
 
@@ -141,28 +90,11 @@ class Login extends Component {
                 <button className="btn btn-primary" type="submit" onClick={this.handleregister}>Register</button>
                 <button className="btn btn-primary" type="submit" onClick={this.handlelogout}>LogOut</button>
               <hr/>
-                {/* Events Form */}
-                <br/><label>Event Name</label><br/>
-                <input className="form-control" type="text" name="eventname" onChange={this.handlechange} value={this.state.eventname} /><br/>
-                <label>Event Date</label><br/>
-                <input className="form-control" type="text" name="eventdate" onChange={this.handlechange} value={this.state.eventdate}/><br/>
-                <label>Event Description</label><br/>
-
-                <input className="form-control" type="text" name="desc" onChange={this.handlechange} value={this.state.desc}/><br/>
-                <button className="btn btn-primary" type="text" onClick={this.handleAddEvent}>AddEvent</button>
-                <h2>All Events</h2>
-
-              
-                
-                
-              
               </form>
-              <EventPost events={this.state.events} handleDeleteEvent={this.handleDeleteEvent} handleUpdateEvent={this.handleUpdateEvent}/>
-
             </div>
           );
     }
   
 }
 
-export default Login
+export default LoginUi
