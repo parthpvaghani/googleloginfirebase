@@ -1,38 +1,33 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import "./App.css";
 import Login from './Login'
 import LoginUi from './LoginUi'
 import * as firebase from 'firebase'
 
-
-
 function App() {
-  // const Authorized = () => {
-  //   console.log('function authorized called')
-  //   firebase.auth().onAuthStateChanged(function(user) {
-  //     if (user) {
-  //       // User is signed in.
-  //       console.log('signedin')
-  //       return (
-  //         (<Login />)
-  //       )
-  //       // ...
-  //     } else {
-  //       // User is signed out.
-  //       console.log('signedout')
 
-  //       return (<LoginUi />)
-  //       // ...
-  //     }
-  //   });
-  // }
-  return (
-    <div className="App">
-        <hr/>
-        <Login/>
-        <hr/>
-    </div>
-  );
+const [login,setlogin] = useState('false');
+ useEffect(()=>
+ {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in.
+      console.log('signedin')
+      setlogin(true)
+      // ...
+    } else {
+      // User is signed out.
+      setlogin(false)
+      // ...
+    }
+  })
+},[])
+
+return(
+  <div>
+  {(login)?<Login/>:<LoginUi/>}
+  </div>
+)
 }
 
 export default App;

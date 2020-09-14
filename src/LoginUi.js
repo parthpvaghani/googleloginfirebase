@@ -46,7 +46,6 @@ class LoginUi extends Component {
            .catch((error)=>{
                 alert(error.message)
            })
-           alert('successfully registered')
         }
 
     handleregister(event){

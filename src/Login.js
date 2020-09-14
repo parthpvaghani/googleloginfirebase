@@ -7,19 +7,14 @@ class Login extends Component {
     constructor(props){
         super(props);
         this.state = {
-            username:'',
-            password:'',
             eventname:'',
             eventdate:'',
             desc:'',
             events:[]
         }
-        this.handlelogin = this.handlelogin.bind(this)
         this.handlechange = this.handlechange.bind(this)
-        this.handleregister = this.handleregister.bind(this)
         this.handlelogout = this.handlelogout.bind(this)
         this.handleAddEvent = this.handleAddEvent.bind(this)
-        this.handleDeleteEvent = this.handleDeleteEvent.bind(this)
         this.handleUpdateEvent = this.handleUpdateEvent.bind(this)
     }
 
@@ -30,43 +25,10 @@ class Login extends Component {
         )
     }
 
-    handlegooglelogin(event){
-    event.preventDefault();
-       const provider =  new firebase.auth.GoogleAuthProvider();
-       provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-       auth.signInWithPopup(provider)
-       .then((result)=>{
-            var token = result.credential.accessToken
-            var user = result
-            alert('loggedIn',token,user)
-       })
-       .catch((error)=>{
-            console.log(error.message)
-       })
-    }
+ 
 
-    handlelogin(event){
-        event.preventDefault();
-           auth.signInWithEmailAndPassword(this.state.username,this.state.password)
-           .then((result)=>{
-                alert('loggedIn')
-           })
-           .catch((error)=>{
-                alert(error.message)
-           })
-           alert('successfully registered')
-        }
-
-    handleregister(event){
-    event.preventDefault();
-    auth.createUserWithEmailAndPassword(this.state.username,this.state.password)
-    .then(result=>{
-        alert('registered successfully')
-    })
-    .catch((e)=>{
-            alert(e.message)
-        })
-    }
+   
+    
 
     handlelogout(e){
         e.preventDefault()
@@ -84,22 +46,12 @@ class Login extends Component {
         })
     }
 
-    handleDeleteEvent(e){
-        e.preventDefault()
-
+    handleDeleteEvent = (id) => {
+        console.log('clciked')
+        db.doc(`Events/${id}`).delete()
     }
+
     handleUpdateEvent(e){
-
-        //update data at given location ---UPDATE METHOD
-        // e.preventDefault()
-        // let newlyAddedRef = firebase.database().ref('Users');
-        // newlyAddedRef.update({
-        //     EventName:this.state.eventname
-        // })
-
-        //Add transactional data(fetch+calculation+storeitback)
-        //or simply updation
-        // let eventRef = firebase.database.ref.child('Events')
 
     }
 
@@ -132,14 +84,7 @@ class Login extends Component {
             
             <div className="container">
               <form className="form-group">
-                <label className="mt-10">Username</label><br/>
-                <input className="form-control" type="text" name="username" onChange={this.handlechange} value={this.state.username} /><br/>
-                <label>Password</label><br/>
-                <input className="form-control" type="password" name="password" onChange={this.handlechange} value={this.state.password}/><br/>
-                <button className="btn btn-danger"type="submit" onClick={this.handlegooglelogin}>Google_Login</button>
-                <button className="btn btn-danger" type="submit" onClick={this.handlelogin}>Login</button>
-                <button className="btn btn-primary" type="submit" onClick={this.handleregister}>Register</button>
-                <button className="btn btn-primary" type="submit" onClick={this.handlelogout}>LogOut</button>
+              <button className="btn btn-primary" type="submit" onClick={this.handlelogout}>LogOut</button>
               <hr/>
                 {/* Events Form */}
                 <br/><label>Event Name</label><br/>
@@ -150,13 +95,8 @@ class Login extends Component {
 
                 <input className="form-control" type="text" name="desc" onChange={this.handlechange} value={this.state.desc}/><br/>
                 <button className="btn btn-primary" type="text" onClick={this.handleAddEvent}>AddEvent</button>
-                <h2>All Events</h2>
-
-              
-                
-                
-              
-              </form>
+             </form>
+             <h2>All Events</h2>
               <EventPost events={this.state.events} handleDeleteEvent={this.handleDeleteEvent} handleUpdateEvent={this.handleUpdateEvent}/>
 
             </div>
