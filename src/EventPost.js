@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { db } from "./firebase";
 class EventPost extends React.Component {
   constructor(props) {
     super(props);
@@ -6,6 +7,7 @@ class EventPost extends React.Component {
       updatedeventname: "",
       updatedeventdate: "",
       updateddesc: "",
+      updateid:'',
     };
   }
 
@@ -16,13 +18,25 @@ class EventPost extends React.Component {
     });
   };
 
-  handlesave = (id) => {
-    
-    console.log("new handle save unique id event wise", id);
+  handlesave =  (id) => {
+    db.collection('Events').doc(`${id}`).update({
+      EventName:this.state.updatedeventname,
+      EventDate:this.state.updatedeventdate,
+      EventDesc:this.state.updateddesc
+    })
+
+    this.setState({
+      updateid:''
+    })
   };
 
+ 
+
   handleUpdate = (id) => {
-    console.log("new unique id event wise", id);
+    console.log(id)
+    this.setState({
+      updateid:id
+    })
   };
 
   render() {
@@ -31,13 +45,14 @@ class EventPost extends React.Component {
         <div key={event.id}>
           <div className="card bg-light mb-3">
             <div className="card-body">
-              {true ? (
+              {(event.id!==this.state.updateid) ? (
                 <>
-                  <div Name="card-header">{event.event.EventName}</div>
+                  <label>Event Name:</label>
+                  <h3 Name="card-header">{event.event.EventName}</h3>
+                  <label>Event Description:</label>
                   <h5 className="card-title">{event.event.EventDesc}</h5>
+                  <label>Event Date:</label>
                   <p className="card-text">{event.event.EventDate}</p>
-                  <p className="card-text">{event.id}</p>
-                  <p className="card-text">{index}</p>
 
                   <button
                     className="btn btn-primary"
@@ -58,90 +73,23 @@ class EventPost extends React.Component {
                   >
                     UpdateEvent
                   </button>
-                  {/* Modal -- start */}
-                  <div
-                    class="modal fade"
-                    id="EditEvent"
-                    tabindex="-1"
-                    role="dialog"
-                    aria-labelledby="exampleModalLabel"
-                    aria-hidden="true"
-                  >
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">
-                            Modal {event.id}
-                          </h5>
-                          <button
-                            type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                          >
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <label>Event Name</label>
-                          <input
-                            className="form-control"
-                            type="text"
-                            name="updatedeventname"
-                            onChange={this.handlechange}
-                            value={this.state.updatedeventname}
-                          />
-                          <label>Event desc</label>
-                          <input
-                            className="form-control"
-                            type="text"
-                            name="updateddesc"
-                            onChange={this.handlechange}
-                            value={this.state.updateddesc}
-                          />
-                          <label>Event date</label>
-                          <input
-                            className="form-control"
-                            type="text"
-                            name="updatedeventdate"
-                            onChange={this.handlechange}
-                            value={this.state.updatedeventdate}
-                          />
-                        </div>
-                        <div class="modal-footer">
-                          <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-dismiss="modal"
-                          >
-                            Close
-                          </button>
-                          <button
-                            type="button"
-                            class="btn btn-primary"
-                            onClick={()=> this.handlesave(event)}
-                          >
-                            Save changes
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Modal -- end */}
                 </>
               ) : (
                 <>
                   <div Name="card-header">
+                    <label>Event Name</label>
                     <input
                       className="form-control"
                       type="text"
                       onChange={this.handlechange}
                       name="updatedeventname"
                       value={this.state.updatedeventname}
+                      
                     />
                     <br />
                   </div>
-                  <h5 className="card-title">
+                  <p className="card-title">
+                  <label>Event Description</label>
                     <input
                       className="form-control"
                       type="text"
@@ -150,8 +98,9 @@ class EventPost extends React.Component {
                       value={this.state.updateddesc}
                     />
                     <br />
-                  </h5>
+                  </p>
                   <p className="card-text">
+                  <label>Event Date</label>
                     <input
                       className="form-control"
                       type="text"
@@ -165,12 +114,13 @@ class EventPost extends React.Component {
                     className="btn btn-primary"
                     type="text"
                     onClick={() => {
-                      this.props.handlesave(event.id);
+                      this.handlesave(event.id);
                     }}
-                    // onClick={}
                   >
                     Save
                   </button>
+
+            
                 </>
               )}
             </div>
