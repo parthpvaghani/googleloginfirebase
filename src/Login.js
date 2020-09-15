@@ -4,13 +4,16 @@ import EventPost from './EventPost'
 import * as firebase from "firebase";
 class Login extends Component {
 
+    //to unsubscribe the updates from database
+    unsubscribe = null;
+
     constructor(props){
         super(props);
         this.state = {
             eventname:'',
             eventdate:'',
             desc:'',
-            events:[]
+            events:[],
         }
         this.handlechange = this.handlechange.bind(this)
         this.handlelogout = this.handlelogout.bind(this)
@@ -25,7 +28,7 @@ class Login extends Component {
         )
     }
 
- 
+    
 
    
     
@@ -47,18 +50,20 @@ class Login extends Component {
     }
 
     handleDeleteEvent = (id) => {
-        console.log('clciked')
         db.doc(`Events/${id}`).delete()
     }
 
     handleUpdateEvent(e){
-
+        e.preventDefault()
+        this.setState({
+            update:!this.state.update
+        })
     }
 
     componentDidMount = async () => {
 
         //realtime updates
-        db.collection('Events').onSnapshot(snapshot=>{
+        this.unsubscribe = db.collection('Events').onSnapshot(snapshot=>{
             const events  = snapshot.docs.map(doc=>{
                 return{id:doc.id,event:doc.data()}
              })
@@ -68,6 +73,10 @@ class Login extends Component {
         })
       
        
+    }
+
+    componentWillUnmount(){
+        this.unsubscribe()
     }
 
     render(){
@@ -92,12 +101,11 @@ class Login extends Component {
                 <label>Event Date</label><br/>
                 <input className="form-control" type="text" name="eventdate" onChange={this.handlechange} value={this.state.eventdate}/><br/>
                 <label>Event Description</label><br/>
-
                 <input className="form-control" type="text" name="desc" onChange={this.handlechange} value={this.state.desc}/><br/>
                 <button className="btn btn-primary" type="text" onClick={this.handleAddEvent}>AddEvent</button>
              </form>
              <h2>All Events</h2>
-              <EventPost events={this.state.events} handleDeleteEvent={this.handleDeleteEvent} handleUpdateEvent={this.handleUpdateEvent}/>
+              <EventPost events={this.state.events} handlechange={this.handlechange} handleDeleteEvent={this.handleDeleteEvent} handleUpdateEvent={this.handleUpdateEvent}  update={this.state.update}/>
 
             </div>
           );
