@@ -12,7 +12,6 @@ class LoginUi extends Component {
         this.handlelogin = this.handlelogin.bind(this)
         this.handlechange = this.handlechange.bind(this)
         this.handleregister = this.handleregister.bind(this)
-        this.handlelogout = this.handlelogout.bind(this)
     }
 
     handlechange(event){
@@ -30,7 +29,6 @@ class LoginUi extends Component {
        .then((result)=>{
             var token = result.credential.accessToken
             var user = result
-            alert('loggedIn',token,user)
        })
        .catch((error)=>{
             console.log(error.message)
@@ -41,7 +39,6 @@ class LoginUi extends Component {
         event.preventDefault();
            auth.signInWithEmailAndPassword(this.state.username,this.state.password)
            .then((result)=>{
-                alert('loggedIn')
            })
            .catch((error)=>{
                 alert(error.message)
@@ -52,17 +49,10 @@ class LoginUi extends Component {
     event.preventDefault();
     auth.createUserWithEmailAndPassword(this.state.username,this.state.password)
     .then(result=>{
-        alert('registered successfully')
     })
     .catch((e)=>{
             alert(e.message)
         })
-    }
-
-    handlelogout(e){
-        e.preventDefault()
-        auth.signOut().then()
-        alert('signed Out')
     }
 
    
@@ -78,16 +68,18 @@ class LoginUi extends Component {
         })
         return (
             
-            <div className="container">
+            <div className="container login__form shadow p-3 mb-5 bg-white rounded">
+                <h1>Firebase Demo App</h1>
+                <hr/>
               <form className="form-group">
                 <label className="mt-10">Username</label><br/>
                 <input className="form-control" type="text" name="username" onChange={this.handlechange} value={this.state.username} /><br/>
                 <label>Password</label><br/>
                 <input className="form-control" type="password" name="password" onChange={this.handlechange} value={this.state.password}/><br/>
-                <button className="btn btn-danger"type="submit" onClick={this.handlegooglelogin}>Google_Login</button>
                 <button className="btn btn-danger" type="submit" onClick={this.handlelogin}>Login</button>
                 <button className="btn btn-primary" type="submit" onClick={this.handleregister}>Register</button>
-                <button className="btn btn-primary" type="submit" onClick={this.handlelogout}>LogOut</button>
+                <button className="btn btn-danger"type="submit" onClick={this.handlegooglelogin}>GoogleLogin</button>
+
               <hr/>
               </form>
             </div>

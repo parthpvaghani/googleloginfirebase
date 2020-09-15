@@ -32,17 +32,20 @@ class EventPost extends React.Component {
 
  
 
-  handleUpdate = (id) => {
-    console.log(id)
+  handleUpdate = (event) => {
+    console.log(event.id)
     this.setState({
-      updateid:id
+      updateid:event.id,
+      updatedeventname:event.event.EventName,
+      updatedeventdate:event.event.EventDate,
+      updateddesc:event.event.EventDesc
     })
   };
 
   render() {
     return this.props.events.map((event, index) => {
       return (
-        <div key={event.id}>
+        <div key={event.id} className="events shadow-lg">
           <div className="card bg-light mb-3">
             <div className="card-body">
               {(event.id!==this.state.updateid) ? (
@@ -69,7 +72,7 @@ class EventPost extends React.Component {
                     data-toggle="modal"
                     data-target="#EditEvent"
                     type="text"
-                    onClick={() => this.handleUpdate(event.id)}
+                    onClick={() => this.handleUpdate(event)}
                   >
                     UpdateEvent
                   </button>

@@ -36,7 +36,6 @@ class Login extends Component {
     handlelogout(e){
         e.preventDefault()
         auth.signOut().then()
-        alert('signed Out')
     }
 
     handleAddEvent(e){
@@ -90,10 +89,12 @@ class Login extends Component {
                 }
         })
         return (
-            
+            <>
             <div className="container">
               <form className="form-group">
-              <button className="btn btn-primary" type="submit" onClick={this.handlelogout}>LogOut</button>
+                  <div className="d-flex justify-content-end">
+              <button className="btn btn-danger " type="submit" onClick={this.handlelogout}>LogOut</button>
+              </div>
               <hr/>
                 {/* Events Form */}
                 <br/><label>Event Name</label><br/>
@@ -105,9 +106,11 @@ class Login extends Component {
                 <button className="btn btn-primary" type="text" onClick={this.handleAddEvent}>AddEvent</button>
              </form>
              <h2>All Events</h2>
-              <EventPost events={this.state.events} handlechange={this.handlechange} handleDeleteEvent={this.handleDeleteEvent} handleUpdateEvent={this.handleUpdateEvent}  update={this.state.update}/>
-
+             <div className="events">
+             <EventPost events={this.state.events} handlechange={this.handlechange} handleDeleteEvent={this.handleDeleteEvent} handleUpdateEvent={this.handleUpdateEvent}  update={this.state.update}/>
             </div>
+            </div>
+            </>
           );
     }
   

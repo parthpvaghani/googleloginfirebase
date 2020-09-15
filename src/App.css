@@ -24,8 +24,28 @@
   color: white;
 }
 
+
+.login__form{
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  width: 500px;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.events{
+  display: flex;
+  margin: 10px;
+}
+
 .App-link {
   color: #61dafb;
+}
+
+button{
+
 }
 
 @keyframes App-logo-spin {
